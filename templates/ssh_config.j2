@@ -1,0 +1,8 @@
+{{ ansible_managed | comment }}
+{% for host in openssh_ssh_config %}
+Host {{ host['host'] }}
+{%   for k,v in host['config'].items() %}
+  {{ k }} {{ v }}
+{%   endfor %}
+
+{% endfor %}

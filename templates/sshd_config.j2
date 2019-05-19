@@ -1,0 +1,124 @@
+{{ ansible_managed | comment }}
+
+Port {{ openssh_port }}
+
+AddressFamily {{ openssh_address_family }}
+ListenAddress {{ openssh_listen_address }}
+
+{% for key in openssh_host_keys %}
+HostKey {{ key }}
+{% endfor %}
+
+# Logging
+SyslogFacility {{ openssh_syslog_facility }}
+LogLevel {{ openssh_log_level }}
+
+# Authentication:
+
+LoginGraceTime {{ openssh_login_grace_time }}
+PermitRootLogin no
+StrictModes {{ 'yes' if (openssh_strict_modes | bool) else 'no' }}
+MaxAuthTries {{ openssh_max_auth_tries }}
+MaxSessions {{ openssh_max_sessions }}
+
+PubkeyAuthentication yes
+
+{% for f in openssh_authorized_keys_files %}
+AuthorizedKeysFile {{ f }}
+{% endfor %}
+RevokedKeys {{ openssh_revoked_keys }}
+{% if openssh_trusted_user_ca_keys %}
+TrustedUserCAKeys {{ openssh_trusted_user_ca_keys }}
+{%   if openssh_authorized_principals_files %}
+{%     for f in openssh_authorized_principals_files %}
+AuthorizedPrincipalsFile {{ f }}
+{%     endfor %}
+{%   endif %}
+{% endif %}
+
+HostbasedAuthentication no
+IgnoreUserKnownHosts yes
+IgnoreRhosts yes
+
+# To disable tunneled clear text passwords, change to no here!
+PasswordAuthentication {{ 'yes' if (openssh_password_authentication | bool) else 'no' }}
+PermitEmptyPasswords no
+
+# Change to yes to enable challenge-response passwords (beware issues with
+# some PAM modules and threads)
+ChallengeResponseAuthentication {{ 'yes' if (openssh_challenge_response_authentication | bool) else 'no' }}
+
+{% if openssh_configure_kerberos %}
+# Kerberos options
+KerberosAuthentication {{ 'yes' if (openssh_kerberos_authentication | bool) else 'no' }}
+KerberosOrLocalPasswd {{ 'yes' if (openssh_kerberos_or_local_password | bool) else 'np' }}
+KerberosTicketCleanup {{ 'yes' if (openssh_kerberos_ticket_cleanup | bool) else 'no' }}
+KerberosGetAFSToken {{ 'yes' if (openssh_get_afs_token | bool) else 'no' }}
+{% endif %}
+
+UsePAM {{ 'yes' if (openssh_use_pam | bool) else 'no' }}
+
+AllowAgentForwarding {{ 'yes' if (openssh_allow_agent_forwarding| bool) else 'no' }}
+AllowTcpForwarding {{ 'yes' if (openssh_allow_tcp_forwarding | bool) else 'no' }}
+TCPKeepAlive no
+
+GatewayPorts no
+
+X11Forwarding no
+X11UseLocalhost yes
+
+UseLogin no
+#UsePrivilegeSeparation sandbox
+
+PrintLastLog yes
+#Compression delayed
+#ChrootDirectory none
+#VersionAddendum none
+
+UseDNS {{ 'yes' if (openssh_use_dns | bool) else 'no' }}
+PidFile {{ openssh_pid_file }}
+ClientAliveInterval {{ openssh_client_alive_interval }}
+ClientAliveCountMax {{ openssh_client_alive_count_max }}
+MaxStartups {{ openssh_max_startups }}
+
+PermitTunnel {{ 'yes' if (openssh_permit_tunnel | bool) else 'no' }}
+
+{% if openssh_permit_user_environment %}
+PermitUserEnvironment yes
+{%   for var in openssh_user_accept_env %}
+AcceptEnv {{ var }}
+{%   endfor %}
+{% else %}
+PermitUserEnvironment no
+{% endif %}
+
+Banner {{ openssh_banner }}
+PrintMotd {{ 'yes' if (openssh_print_motd | bool) else 'no' }}
+
+Ciphers {{ openssh_ciphers | join(',') }}
+KexAlgorithms {{ openssh_kex_algorithms | join(',') }}
+MACs {{ openssh_macs | join(',') }}
+
+{% if openssh_allow_users | length > 0 %}
+AllowUsers {{ openssh_allow_users | join(' ') }}
+{% endif %}
+{% if openssh_allow_groups | length > 0 %}
+AllowGroups {{ openssh_allow_groups | join(' ') }}
+{% endif %}
+
+{% if openssh_deny_users | length > 0 %}
+DenyUsers {{ openssh_deny_users | join(' ') }}
+{% endif %}
+{% if openssh_deny_groups | length > 0 %}
+DenyGroups {{ openssh_deny_groups | join(' ') }}
+{% endif %}
+
+# override default of no subsystems
+Subsystem       sftp    /usr/lib/openssh/sftp-server
+
+# Example of overriding settings on a per-user basis
+#Match User anoncvs
+#       X11Forwarding no
+#       AllowTcpForwarding no
+#       PermitTTY no
+#       ForceCommand cvs server

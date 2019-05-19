@@ -1,0 +1,35 @@
+---
+- name: Get OS specific vars
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install ssh packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ openssh_packages }}"
+
+- name: Create ssh config
+  template:
+    src: ssh_config.j2
+    dest: /etc/ssh/ssh_config
+    owner: root
+    group: root
+    mode: 0600
+  notify:
+    - restart ssh
+
+- name: Create sshd config
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart ssh
+
+- name: Manage ssh service
+  service:
+    name: "{{ openssh_service_name }}"
+    enabled: "{{ openssh_service_enabled }}"
+    state: "{{ openssh_service_state }}"

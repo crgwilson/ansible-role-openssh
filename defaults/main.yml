@@ -1,0 +1,87 @@
+---
+openssh_ssh_config:
+  - host: '*'
+    config:
+      SendEnv: LANG LC_*
+      HashKnownHosts: 'yes'
+      GSSAPIAuthentication: 'yes'
+
+openssh_service_enabled: true
+openssh_service_state: started
+
+openssh_port: 22
+openssh_address_family: any
+openssh_listen_address: 0.0.0.0
+openssh_host_keys:
+  - /etc/ssh/ssh_host_ecdsa_key
+  - /etc/ssh/ssh_host_ed25519_key
+  - /etc/ssh/ssh_host_ed25519_key
+
+openssh_syslog_facility: AUTH
+openssh_log_level: INFO
+
+openssh_login_grace_time: 2m
+openssh_strict_modes: true
+openssh_max_auth_tries: 3
+openssh_max_sessions: 10
+
+openssh_authorized_keys_files:
+  - .ssh/authorized_keys
+  - .ssh/authorized_keys2
+
+openssh_authorized_principals_files:
+  - none
+
+openssh_password_authentication: true
+openssh_challenge_response_authentication: false
+
+openssh_configure_kerberos: false
+openssh_kerberos_authentication: false
+openssh_kerberos_or_local_password: true
+openssh_kerberos_ticket_cleanup: true
+openssh_get_afs_token: false
+
+openssh_use_pam: true
+
+openssh_allow_agent_forwarding: false
+openssh_allow_tcp_forwarding: false
+
+openssh_use_dns: false
+openssh_pid_file: /var/run/sshd.pid
+
+openssh_client_alive_interval: 0
+openssh_client_alive_count_max: 3
+openssh_max_startups: 10:30:100
+
+openssh_permit_tunnel: true
+
+openssh_permit_user_environment: true
+openssh_user_accept_env:
+  - LANG LC_*
+
+openssh_print_motd: true
+openssh_banner: /etc/issue.net
+
+openssh_revoked_keys: /etc/ssh/revoked_keys
+openssh_trusted_user_ca_keys: ''
+
+openssh_allow_users: []
+openssh_allow_groups: []
+openssh_deny_users: []
+openssh_deny_groups: []
+
+openssh_ciphers:
+  - chacha20-poly1305@openssh.com
+  - aes256-gcm@openssh.com
+  - aes128-gcm@openssh.com
+  - aes256-ctr
+  - aes192-ctr
+  - aes128-ctr
+
+openssh_kex_algorithms:
+  - curve25519-sha256@libssh.org
+
+openssh_macs:
+  - hmac-sha2-512-etm@openssh.com
+  - hmac-sha2-256-etm@openssh.com
+  - umac-128-etm@openssh.com
