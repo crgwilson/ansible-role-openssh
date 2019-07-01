@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Craig Wilson
+  author: crgwilson
   description: Configure and manage SSH
   license: Apache v2
   min_ansible_version: 2.4
