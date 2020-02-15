@@ -26,7 +26,7 @@ PubkeyAuthentication yes
 {% for f in openssh_authorized_keys_files %}
 AuthorizedKeysFile {{ f }}
 {% endfor %}
-RevokedKeys {{ openssh_revoked_keys }}
+RevokedKeys {{ openssh_revoked_keys_file }}
 {% if openssh_trusted_user_ca_keys %}
 TrustedUserCAKeys {{ openssh_trusted_user_ca_keys }}
 {%   if openssh_authorized_principals_files %}
