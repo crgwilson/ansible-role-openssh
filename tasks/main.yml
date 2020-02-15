@@ -11,7 +11,7 @@
 - name: Create revoked keys file
   template:
     src: revoked_keys.j2
-    dest: "{{ openssh_revoked_keys }}"
+    dest: "{{ openssh_revoked_keys_file }}"
     owner: root
     group: root
     mode: 0600

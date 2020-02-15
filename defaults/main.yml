@@ -62,7 +62,8 @@ openssh_user_accept_env:
 openssh_print_motd: true
 openssh_banner: /etc/issue.net
 
-openssh_revoked_keys: /etc/ssh/revoked_keys
+openssh_revoked_keys_file: /etc/ssh/revoked_keys
+openssh_revoked_keys: []
 openssh_trusted_user_ca_keys: ''
 
 openssh_allow_users: []
