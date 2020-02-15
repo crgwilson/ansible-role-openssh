@@ -21,6 +21,13 @@ def test_default_client_package(host):
     assert p.is_installed
 
 
+def test_default_revoked_keys_file(host):
+    f = host.file('/etc/ssh/revoked_keys')
+    assert f.user == 'root'
+    assert f.group == 'root'
+    assert f.mode == 0o600
+
+
 def test_default_service(host):
     s = host.service('sshd')
     assert s.is_running

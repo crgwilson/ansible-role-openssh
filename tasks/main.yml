@@ -8,6 +8,14 @@
     state: present
   with_items: "{{ openssh_packages }}"
 
+- name: Create revoked keys file
+  template:
+    src: revoked_keys.j2
+    dest: "{{ openssh_revoked_keys }}"
+    owner: root
+    group: root
+    mode: 0600
+
 - name: Create ssh config
   template:
     src: ssh_config.j2
