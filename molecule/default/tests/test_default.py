@@ -29,5 +29,10 @@ def test_default_revoked_keys_file(host):
 
 
 def test_default_service(host):
-    s = host.service('sshd')
+    if host.system_info.distribution == 'debian':
+        service_name = 'ssh'
+    else:
+        service_name = 'sshd'
+
+    s = host.service(service_name)
     assert s.is_running
