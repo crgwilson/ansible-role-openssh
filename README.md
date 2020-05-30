@@ -1,5 +1,7 @@
 # Ansible role: OpenSSH
 
+![Molecule Tests](https://github.com/crgwilson/ansible-role-openssh/workflows/Molecule%20Test/badge.svg)
+
 Manage SSH configuration & service
 
 * Install SSH related packages
